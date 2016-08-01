@@ -32,8 +32,8 @@ var ndwi_res = collection.map(
 });
 
 // Export the feature set as a CSV to your Drive folder with a table named 
-// `ndwi-results`
+// `ndwi-ee`
 Export.table.toDrive(
   ndwi_res.flatten(), 
-  'ndwi-results'
+  'ndwi-ee'
 );

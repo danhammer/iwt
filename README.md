@@ -21,7 +21,7 @@ The composites can be created within either 32-day or Annual intervals. The foll
 
 ### Process district map
 
-The original data set, uploaded directly from WBCSD is found [**here**](https://danhammer.carto.com/tables/distrct_bdy).  The permissions are public, so that any developer can access the map online and make changes on their [Carto](https://www.carto.com) account.  The instructions are found in the [first-stage script](code/first.sql).
+The original data set, uploaded directly from WBCSD is found [**here**](https://danhammer.carto.com/tables/distrct_bdy).  The permissions are public, so that any developer can access the map online and make changes on their [Carto](https://www.carto.com) account.  The instructions are found in the first-stage SQL script [`preprocess.sql`](code/preprocess.sql).
 
 > **input**: original boundary map
 
@@ -30,7 +30,7 @@ The original data set, uploaded directly from WBCSD is found [**here**](https://
 
 ### Aggregate water information by district
 
-There are actually two steps to this work, both the JavaScript to process the satellite imagery on Earth Engine and the Python code to process the (rather messy) output from Earth Engine.  The JavaScript aggregates 
+There are actually two steps to this work, both the JavaScript to process the satellite imagery on Earth Engine and the Python code to process the (rather messy) output from Earth Engine.  The JavaScript, [`aggregate.js`](code/aggregate.js), aggregates the imagery for each district and exports to a CSV on Google Drive. The Python, [`process_results.py`](code/process_results.py), then processes the CSV into a Pandas data frame, cleans and reshapes the output, and finally outputs to yet another CSV for upload to Carto.
 
 > **input**: fusion table of simplified boundaries
 
@@ -38,7 +38,12 @@ There are actually two steps to this work, both the JavaScript to process the sa
 
 ### Merge water information with boundaries
 
+The final script, [`merge.sql`](code/merge.sql) performs an `INNER JOIN` on the output CSV and the *original* district boundaries.  
 
 > **input**: CSV with cartodb_id and annual water data
 
 > **output**:  Online Carto map with water data as column fields
+
+### The final output
+
+The final output has been merged into a Carto map.  The Carto infrastructure allows the data to be downloaded as a CSV, shapefile, KML, GeoJSON, and SVG files.  A map of the final data is [here](https://danhammer.carto.com/viz/fc82a266-577e-11e6-8107-0e3ff518bd15/embed_map), visualized for the 2016 composite.  The shapefile can be directly downloaded from [this link](https://dl.dropboxusercontent.com/u/5365589/distrct_bdy.zip). We can create a fully fledged web application (with animation) from this infrastructure fairly quickly.
